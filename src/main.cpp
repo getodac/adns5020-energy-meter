@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <adns5020.h>
+#include <VirtualWire.h>
+#include <LibPrintf.h>
 
 #define resetTimer(x) x = millis()
 #define timerExceed(x, y) (millis() - x) > y
@@ -25,12 +27,15 @@
 #define EM_PULSE_MIN_HEIGHT 5 // in percents
 #define EM_PULSE_TRESHOLD (minSum + (PIXEL_SUM_MAX*EM_PULSE_MIN_HEIGHT/100)) //(minSum < 20 ? 30 : (minSum + (PIXEL_SUM_MAX*EM_PULSE_MIN_HEIGHT/100)))
 #define LED 10
+//#define VW_MAX_MESSAGE_LEN 16
 
 
 uint32_t t0, t1, t2, t3, t4, t5;  // timers
 uint16_t readCt = 0, currentSum = 0, minSum = 0, pulseTicks = 0, lastMin = 0;
 uint16_t pulseCt = 0;
 
+
+uint8_t buf[16] = "ct=";
 
 void printSensorInfo() {
     Serial.print("min=");
@@ -76,6 +81,9 @@ void setup() {
         Serial.println(readBurst());
     }
     //stopBurstRead();
+    vw_set_tx_pin(13);
+    vw_setup(2000);
+	
 }
 
 uint8_t a[200];
@@ -90,6 +98,7 @@ void printArray() {
     Serial.println("]");
 }
 
+uint16_t ct = 0, lastPulseCt=0;
 void loop() {
     if (timerExceed(t0, SENSOR_READ_INTERVAL)) {
         resetTimer(t0);
@@ -146,6 +155,24 @@ void loop() {
         if (timerExceed(t2, 2100)) {
             digitalWrite(LED, LOW);
             resetTimer(t2);
+        }
+    }
+
+
+    
+    // if (timerExceed(t3, 3000)) { 
+    //     resetTimer(t3);
+    //     sprintf(buf, "ct=%d", ct++);
+    //     vw_send((uint8_t *)buf, strlen(buf));
+    //     vw_wait_tx(); // Wait until the whole message is gone
+    // }
+    if (timerExceed(t3, 500)) { 
+        resetTimer(t3);
+        if (pulseCt != lastPulseCt) {
+            lastPulseCt = pulseCt;
+            sprintf(buf, "pulseCt=%d", pulseCt);
+            vw_send((uint8_t *)buf, strlen(buf));
+            vw_wait_tx(); // Wait until the whole message is gone
         }
     }
 
