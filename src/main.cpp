@@ -33,7 +33,7 @@ uint32_t t0, t1, t2, t3, t4, t5; // timers
 uint16_t readCt = 0, currentSum = 0, minSum = 0, pulseTicks = 0, lastMin = 0;
 uint16_t pulseCt = 0;
 
-uint8_t buf[16] = "ct=";
+char buf[16] = "ct=";
 
 void printSensorInfo()
 {
