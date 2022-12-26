@@ -15,9 +15,9 @@
 #define ADNS5020_SUM_ADDR 0x09
 #define READ_COUNTER_RESET_TIME 200 // in miliseconds
 #define READ_COUNTER_RESET READ_COUNTER_RESET_TIME / TICKS_MS
-#define EM_PULSE_WIDTH 40 // in miliseconds
+#define EM_PULSE_WIDTH 36 // in miliseconds
 #define EM_PULSE_CT (EM_PULSE_WIDTH / TICKS_MS)
-#define EM_PULSE_CT_MAX_SHIFT_PERCENTAGE 10
+#define EM_PULSE_CT_MAX_SHIFT_PERCENTAGE 40
 #define EM_PULSE_CT_MAX_SHIFT (EM_PULSE_CT * EM_PULSE_CT_MAX_SHIFT_PERCENTAGE / 100)
 #define PIXEL_SUM_MAX 223
 
@@ -161,34 +161,34 @@ void loop()
         printSensorInfo();
     }
 
-    // if (timerExceed(t2, 500))
-    // {
-    //     if (pulseCt != lpc)
-    //     {
-    //         digitalWrite(LED, HIGH);
-    //     } else {
-    //         resetTimer(t2);
-    //     }
-    //     if (timerExceed(t2, 600))
-    //     {
-    //         resetTimer(t2);
-    //         lpc = pulseCt;
-    //         digitalWrite(LED, LOW);
-    //     }
-    // }
-
-    if (timerExceed(t2, 2000))
+    if (timerExceed(t2, 500))
     {
-        if (digitalRead(LED) == LOW)
+        if (pulseCt != lpc)
         {
             digitalWrite(LED, HIGH);
+        } else {
+            resetTimer(t2);
         }
-        if (timerExceed(t2, 2040))
+        if (timerExceed(t2, 600))
         {
             resetTimer(t2);
+            lpc = pulseCt;
             digitalWrite(LED, LOW);
         }
     }
+
+    // if (timerExceed(t2, 2000))
+    // {
+    //     if (digitalRead(LED) == LOW)
+    //     {
+    //         digitalWrite(LED, HIGH);
+    //     }
+    //     if (timerExceed(t2, 2040))
+    //     {
+    //         resetTimer(t2);
+    //         digitalWrite(LED, LOW);
+    //     }
+    // }
 
     // if (timerExceed(t3, 3000)) {
     //     resetTimer(t3);
