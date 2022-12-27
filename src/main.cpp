@@ -25,7 +25,8 @@
 #define EM_PULSE_CT_MAX (EM_PULSE_CT + EM_PULSE_CT_MAX_SHIFT)
 
 #define EM_PULSE_MIN_HEIGHT 5                                                    // in percents
-#define EM_PULSE_TRESHOLD (minSum + (PIXEL_SUM_MAX * EM_PULSE_MIN_HEIGHT / 100)) //(minSum < 20 ? 30 : (minSum + (PIXEL_SUM_MAX*EM_PULSE_MIN_HEIGHT/100)))
+//#define EM_PULSE_TRESHOLD (minSum + (PIXEL_SUM_MAX * EM_PULSE_MIN_HEIGHT / 100)) //(minSum < 20 ? 30 : (minSum + (PIXEL_SUM_MAX*EM_PULSE_MIN_HEIGHT/100)))
+#define EM_PULSE_TRESHOLD (minSum + EM_PULSE_MIN_HEIGHT)
 #define LED 10
 // #define VW_MAX_MESSAGE_LEN 16
 
